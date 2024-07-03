@@ -1,0 +1,23 @@
+{
+    "name": "my-vendor/blog-post",
+    "description": "A custom package for managing blog posts.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Ravi",
+            "email": "ravi.sharma@galaxyweblinks.in"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MyVendor\\BlogPost\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MyVendor\\BlogPost\\BlogPostServiceProvider"
+            ]
+        }
+    }
+}

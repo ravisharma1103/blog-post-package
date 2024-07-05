@@ -4,10 +4,14 @@ namespace MyVendor\BlogPost\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use MyVendor\BlogPost\Models\BlogPost;
+use Illuminate\Support\Str;
 
 class BlogPostController extends Controller
 {
+
+
     public function index()
     {
         $posts = BlogPost::all();
@@ -26,7 +30,11 @@ class BlogPostController extends Controller
             'content' => 'required',
         ]);
 
-        BlogPost::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id(); // Get logged-in user's ID
+        $data['slug'] = Str::slug($request->title); // Generate slug from title
+
+        BlogPost::create($data);
 
         return redirect()->route('blog-posts.index');
     }
@@ -48,7 +56,15 @@ class BlogPostController extends Controller
             'content' => 'required',
         ]);
 
-        $blogPost->update($request->all());
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->title); // Update slug from title
+
+        // Only update user_id if it's allowed and properly validated
+        // if (Auth::user()->isAdmin()) { // Example condition where user_id can be updated
+        //     $data['user_id'] = $request->user_id;
+        // }
+
+        $blogPost->update($data);
 
         return redirect()->route('blog-posts.index');
     }
